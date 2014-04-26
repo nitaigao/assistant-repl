@@ -5,8 +5,8 @@ import "io"
 import "os"
 import "strings"
 import "bufio"
-import "net/url"
 import "net/http"
+import "net/url"
 
 type ShellCommand struct {
 	shortcut string
@@ -41,8 +41,6 @@ func main() {
 	go startResponder()
 
 	var shellCommands = [...] ShellCommand { { "q", "quit" } }
-
-	http.PostForm("http://localhost:8080/register", url.Values{"host":{"localhost"}, "port":{"7000"}})
 
 	var quit bool
 	var input string
