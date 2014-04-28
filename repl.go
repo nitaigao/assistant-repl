@@ -22,17 +22,16 @@ type ConversationInput struct {
 }
 
 func (c *ConversationInput) AddToConversation() {
-	http.PostForm("http://localhost:8080", url.Values{"text":{c.text}})
-	return
+	http.PostForm("http://localhost:8080", url.Values{"text":{c.text}, "callback":{"http://localhost:7000"}})
 }
 
 func sayHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	fmt.Println(r.FormValue("text"))
+	fmt.Println(r.FormValue("result"))
 }
 
 func startResponder() {
-	http.HandleFunc("/say", sayHandler)
+	http.HandleFunc("/", sayHandler)
 	http.ListenAndServe(":7000", nil)
 }
 
