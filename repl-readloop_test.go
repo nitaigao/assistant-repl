@@ -34,9 +34,13 @@ func TestReadLoopCallsHandlers(t *testing.T) {
 
   readLoop.processInput("test")
 
-  fmt.Println(testCommand.CallCount)
-
   if (testCommand.CallCount <= 0) {
+    t.Fail()
+  }
+
+  readLoop.processInput("t")
+
+  if (testCommand.CallCount <= 1) {
     t.Fail()
   }
 }
