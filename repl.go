@@ -21,6 +21,9 @@ func requestHandler(input string) {
 func main() {
 	go startResponder()
 
-	var readLoop = ReplReadLoop{}
+	var shellCommands = make([]IShellCommand, 0)
+	shellCommands = append(shellCommands, NewQuitShellCommand())
+
+	var readLoop = ReplReadLoop { shellCommands, false }
 	readLoop.startLoop(requestHandler)
 }
