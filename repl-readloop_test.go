@@ -1,7 +1,6 @@
 package main
 
 import "testing"
-import "fmt"
 
 type TestShellCommand struct {
   ShellCommand
@@ -40,7 +39,7 @@ func TestReadLoopCallsHandlers(t *testing.T) {
 
   readLoop.processInput("t")
 
-  if (testCommand.CallCount <= 1) {
+  if (testCommand.CallCount < 1) {
     t.Fail()
   }
 }
