@@ -1,0 +1,17 @@
+{
+  "name": "assistant-repl",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "repl": "~0.1.3",
+    "readline": "0.0.3",
+    "request": "~2.34.0",
+    "querystring": "~0.2.0"
+  }
+}
