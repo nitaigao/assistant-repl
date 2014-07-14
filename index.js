@@ -12,7 +12,7 @@ function sendCommand(command) {
   }
   var message = JSON.stringify(body)
   console.log(message);
-  request.post("http://localhost:8080", {body: message}, function(err, response) {
+  request.post(settings.detection, {body: message}, function(err, response) {
     if (err) {
       console.error("\n", err);
       rl.prompt()
