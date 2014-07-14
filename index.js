@@ -56,7 +56,7 @@ function createCallbackServer(port) {
       res.end('OK!');
 
       var responseData = JSON.parse(body)
-      console.log("\n" + responseData.result)
+      console.log("\n" + body)
       rl.prompt()
     })
 
