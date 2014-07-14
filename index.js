@@ -3,14 +3,30 @@ var request = require('request')
 var qs = require('querystring');
 var http = require('http')
 
-function sendCommand(command, callbackUrl) {
+process.env.NODE_ENV = process.env.NODE_ENV || "development"
+
+var DETECTION_URLS = {
+  "development" : "http://localhost:8080",
+  "production"  : "http://assistant-detection.herokuapp.com"
+}
+
+var DETECTION_URL = DETECTION_URLS[process.env.NODE_ENV]
+
+var CALLBACK_URLS = {
+  "development" : "http://localhost:7000",
+  "production"  : "http://assistant-repl.herokuapp.com"
+}
+
+var CALLBACK_URL = CALLBACK_URLS[process.env.NODE_ENV]
+
+function sendCommand(command) {
   var body = {
     text: command,
-    callback: process.env.BASE_URI
+    callback: CALLBACK_URL
   }
   var message = JSON.stringify(body)
   console.log(message);
-  request.post(callbackUrl, {body: message})
+  request.post(DETECTION_URL, {body: message})
 }
 
 var rl = readline.createInterface({
@@ -18,13 +34,13 @@ var rl = readline.createInterface({
   output: process.stdout
 })
 
-function createREPL(callbackUrl) {
+function createREPL() {
   rl.on('line', function(cmd) {
     if (cmd === 'quit') {
       rl.close()
     }
 
-    sendCommand(cmd, callbackUrl)
+    sendCommand(cmd)
 
     rl.prompt()
   })
@@ -59,9 +75,7 @@ function start() {
   var port = Number(process.env.PORT || 7000);
   console.log("Started on port " + port)
 
-  var callbackUrl = process.env.CALLBACK_URL || "http://localhost:" + port
-  console.log("Callback URL " + callbackUrl)
-  createREPL(callbackUrl)
+  createREPL()
   createCallbackServer(port)
 }
 
