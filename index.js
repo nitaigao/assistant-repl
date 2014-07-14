@@ -12,7 +12,13 @@ function sendCommand(command) {
   }
   var message = JSON.stringify(body)
   console.log(message);
-  request.post(settings.detection, {body: message})
+  request.post("http://localhost:8080", {body: message}, function(err, response) {
+    if (err) {
+      console.error("\n", err);
+      rl.prompt()
+      return 0
+    }
+  });
 }
 
 var rl = readline.createInterface({
