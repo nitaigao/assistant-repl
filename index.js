@@ -3,14 +3,14 @@ var request = require('request')
 var qs = require('querystring');
 var http = require('http')
 
-function sendCommand(command) {
+function sendCommand(command, callbackUrl) {
   var body = {
     text: command,
     callback: process.env.BASE_URI
   }
   var message = JSON.stringify(body)
   console.log(message);
-  request.post("http://localhost:8080", {body: message})
+  request.post(callbackUrl, {body: message})
 }
 
 var rl = readline.createInterface({
@@ -18,13 +18,13 @@ var rl = readline.createInterface({
   output: process.stdout
 })
 
-function createREPL() {
+function createREPL(callbackUrl) {
   rl.on('line', function(cmd) {
     if (cmd === 'quit') {
       rl.close()
     }
 
-    sendCommand(cmd)
+    sendCommand(cmd, callbackUrl)
 
     rl.prompt()
   })
@@ -56,13 +56,13 @@ function createCallbackServer(port) {
 }
 
 function start() {
-  console.log(process.env.URL)
-  // createREPL()
-  //
-  // var port = Number(process.env.PORT || 7000);
-  // console.log("Started on port " + port)
-  //
-  // createCallbackServer(port)
+  var port = Number(process.env.PORT || 7000);
+  console.log("Started on port " + port)
+
+  var callbackUrl = process.env.CALLBACK_URL || "http://localhost:" + port
+  console.log("Callback URL " + callbackUrl)
+  createREPL(callbackUrl)
+  createCallbackServer(port)
 }
 
 start()
