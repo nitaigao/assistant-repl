@@ -1,32 +1,18 @@
-var readline = require('readline')
-var request = require('request')
-var qs = require('querystring');
-var http = require('http')
-
-process.env.NODE_ENV = process.env.NODE_ENV || "development"
-
-var DETECTION_URLS = {
-  "development" : "http://localhost:8080",
-  "production"  : "http://assistant-detection.herokuapp.com"
-}
-
-var DETECTION_URL = DETECTION_URLS[process.env.NODE_ENV]
-
-var CALLBACK_URLS = {
-  "development" : "http://localhost:7000",
-  "production"  : "http://assistant-repl.herokuapp.com"
-}
-
-var CALLBACK_URL = CALLBACK_URLS[process.env.NODE_ENV]
+var readline = require('readline'),
+    request  = require('request'),
+    qs       = require('querystring'),
+    http     = require('http'),
+    settings = require('env-settings')
+;
 
 function sendCommand(command) {
   var body = {
     text: command,
-    callback: CALLBACK_URL
+    callback: settings.callback
   }
   var message = JSON.stringify(body)
   console.log(message);
-  request.post(DETECTION_URL, {body: message})
+  request.post(settings.detection, {body: message})
 }
 
 var rl = readline.createInterface({

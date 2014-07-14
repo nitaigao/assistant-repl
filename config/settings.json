@@ -1,0 +1,14 @@
+{
+  "default": {
+    "detection": "http://localhost:8080",
+    "callback"  : "http://localhost:7000"
+  },
+  "development": {
+    "detection": "http://localhost:8080",
+    "callback"  : "http://localhost:7000"
+  },
+  "production": {
+    "detection" : "http://assistant-detection.herokuapp.com",
+    "callback"  : "http://assistant-repl.herokuapp.com"
+  }
+}
