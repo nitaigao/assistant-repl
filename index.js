@@ -56,7 +56,7 @@ function createCallbackServer(port) {
 }
 
 function start() {
-  console.log(process.env.BASE_URI)
+  console.log(process.env.BASE_IRI)
   // createREPL()
   //
   // var port = Number(process.env.PORT || 7000);
