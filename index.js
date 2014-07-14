@@ -6,7 +6,7 @@ var http = require('http')
 function sendCommand(command) {
   var body = {
     text: command,
-    callback: "http://localhost:7000"
+    callback: process.env.BASE_URI
   }
   var message = JSON.stringify(body)
   console.log(message);
@@ -56,8 +56,13 @@ function createCallbackServer(port) {
 }
 
 function start() {
-  createREPL()
-  createCallbackServer(7000)
+  console.log(process.env.BASE_URI)
+  // createREPL()
+  //
+  // var port = Number(process.env.PORT || 7000);
+  // console.log("Started on port " + port)
+  //
+  // createCallbackServer(port)
 }
 
 start()
