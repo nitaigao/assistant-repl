@@ -2,7 +2,8 @@ var readline = require('readline'),
     request  = require('request'),
     qs       = require('querystring'),
     http     = require('http'),
-    settings = require('env-settings')
+    settings = require('env-settings'),
+    faye     = require('faye')
 ;
 
 function sendCommand(command) {
@@ -11,8 +12,8 @@ function sendCommand(command) {
     callback: settings.callback
   }
   var message = JSON.stringify(body)
-  console.log(message);
-  request.post(settings.detection, {body: message}, function(err, response) {
+  console.log("Sending to server: " + settings.detection + " : " + message);
+  request.post(settings.detection + "/command", {body: message}, function(err, response) {
     if (err) {
       console.error("\n", err);
       rl.prompt()
@@ -27,12 +28,13 @@ var rl = readline.createInterface({
 })
 
 function createREPL() {
-  rl.on('line', function(cmd) {
-    if (cmd === 'quit') {
+  rl.on('line', function(command) {
+    if (command === 'quit') {
       rl.close()
     }
 
-    sendCommand(cmd)
+    var client = new faye.Client(settings.detection + '/');
+    client.publish('/messages', command);
 
     rl.prompt()
   })
@@ -44,31 +46,16 @@ function createREPL() {
   rl.prompt()
 }
 
-function createCallbackServer(port) {
-  http.createServer(function (req, res) {
-    var body = "";
-
-    req.on('data', function (chunk) {
-      body += chunk;
-    });
-
-    req.on('end', function () {
-      res.end('OK!');
-
-      var responseData = JSON.parse(body)
-      console.log("\n" + body)
-      rl.prompt()
-    })
-
-  }).listen(port)
+function createResponse() {
+  var client = new faye.Client(settings.detection + '/');
+  client.subscribe('/responses', function(message) {
+    console.log("\n" + message)
+  });
 }
 
 function start() {
-  var port = Number(process.env.PORT || 7000);
-  console.log("Started on port " + port)
-
   createREPL()
-  createCallbackServer(port)
+  createResponse()
 }
 
 start()
